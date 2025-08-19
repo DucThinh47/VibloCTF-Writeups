@@ -2,10 +2,10 @@
 ## Contents
 ### Web
 - [Web 7](https://github.com/DucThinh47/VibloCTF-Writeups#web-7)
-- [We're out of idea, let's call it Web2]()
+- [We're out of idea, let's call it Web2](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#were-out-of-idea-lets-call-it-web2)
 - [Tricky Sneaky Weby](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#tricky-sneaky-weby)
 - [Web 11](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#web-11)
-- [It's OT TIME!]()
+- [It's OT TIME!](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#its-ot-time)
 #### Web 7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
