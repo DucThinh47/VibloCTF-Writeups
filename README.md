@@ -2,9 +2,10 @@
 ## Contents
 ### Web
 - [Web 7](https://github.com/DucThinh47/VibloCTF-Writeups#web-7)
-- [Web 2](https://github.com/DucThinh47/VibloCTF-Writeups#web-2)
-- [Tricky Sneaky Weby]()
-- [Web 11]()
+- [We're out of idea, let's call it Web2]()
+- [Tricky Sneaky Weby](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#tricky-sneaky-weby)
+- [Web 11](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#web-11)
+- [It's OT TIME!]()
 #### Web 7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -30,7 +31,7 @@ Tôi thử nhập `/?password=abc%00^_^` và tìm được flag:
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image3.png?raw=true)
 
-#### Web 2
+#### We're out of idea, let's call it Web2
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image4.png?raw=true)
 
@@ -47,50 +48,65 @@ Trong request body có 2 tham số là `money` và `rescue`. Tôi thử thay đ�
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image7.png?raw=true)
 #### Tricky Sneaky Weby
 
-![img](8)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image8.png?raw=true)
 
 Mật khẩu của level 1 đã được cho sẵn là `SUN$HELL`, tuy nhiên khi xem source code, tôi thầy rằng dù nhập chữ hoa thì server sẽ luôn ép chuyển về chữ thường thông qua đoạn mã JS:
 
-![img](9)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image9.png?raw=true)
 
 Tôi đã Disable JS thông qua Devtool vừa vượt qua level 1:
 
-![img](10)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image10.png?raw=true)
 
 Sang level 2, mật khẩu đã bị lộ trong source code, được mã hóa dưới dạng base64:
 
-![img](11)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image11.png?raw=true)
 
 Giải mã, điền mật khẩu và tôi tìm được flag:
 
-![img](12)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image12.png?raw=true)
 
 Tuy nhiên, đây không phải flag thật, tôi tiếp tục tìm hiểu source code thì vẫn còn một thử thách nữa:
 
-![img](13)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image13.png?raw=true)
 
-Sang level tiếp theo, trong chuỗi mật khẩu có những khoảng trắng, đồng thời server không cho copy patse mật khẩu để dán vào. Tôi sử dụng console trong devtool và thực thi lệnh để lấy mật khẩu không chứa những ký tự khác:
+Sang level tiếp theo, trong chuỗi mật khẩu có những khoảng trắng, đồng thời server không cho copy patse mật khẩu để dán vào. 
+
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image14.png?raw=true)
+
+Tôi sử dụng console trong devtool và thực thi lệnh để lấy mật khẩu không chứa những ký tự khác:
 
     document.getElementById("password").innerText.replace(/[^\x20-\x7E]/g,"")
 
-![img](15)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image15.png?raw=true)
 
 Sau đó sử dụng Burp Suite để gửi POST request và tìm được flag:
 
-![img](16)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image16.png?raw=true)
 #### Web 11
 
-![img](17)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image17.png?raw=true)
 
 Kiểm tra source code, tôi tìm được path `/1.php`:
 
-![img](18)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image18.png?raw=true)
 
 Truy cập trang này:
 
-![img](19)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image19.png?raw=true)
 
 Khi kiểm tra source code, tôi thấy nó hoàn toàn bị mã hóa, khi thử reload lại trang tôi thấy 1 ảnh khác được hiển thị rất nhanh xong lại biến mất, để ý kỹ thì bức ảnh này sẽ chứa flag.
+#### It's OT TIME!
+
+![img](20)
+
+Thử click `View the source`:
+
+![img](21)
+
+Một đoạn code PHP, thông qua đoạn code này, tôi hiểu rằng mình phải truyền tham số `/?magic_command` với giá trị đúng bằng `HomNayOT_EmNhe` thì mới lấy được flag, tuy nhiên nếu nhập y nguyên thì server sẽ không chấp nhận. Do đó, tôi thử lồng chính chuỗi này vào chính nó `/? magic_command=HomNayOTHomNayOT_EmNhe_EmNhe` và tìm được flag:
+
+![img](22)
 
 
 
