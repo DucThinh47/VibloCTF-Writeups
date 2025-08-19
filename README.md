@@ -6,7 +6,7 @@
 - [Tricky Sneaky Weby](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#tricky-sneaky-weby)
 - [Web 11](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#web-11)
 - [It's OT TIME!](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#its-ot-time)
-- [Sun* Service]()
+- [Sun* Service](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#sun-service)
 #### Web 7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -110,23 +110,23 @@ Một đoạn code PHP, thông qua đoạn code này, tôi hiểu rằng mình p
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image22.png?raw=true)
 #### Sun* Service
 
-![img](23)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image23.png?raw=true)
 
 Là một trang web cho phép ping các domain được nhập. Tôi sẽ thử chèn thêm lệnh bằng cách nhập `google.com;id`:
 
-![img](24)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image24.png?raw=true)
 
 => Có thể lợi dụng lỗ hổng Command Injection, tiếp theo tôi thử chèn `;ls`:
 
-![img](25)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image25.png?raw=true)
 
 Tìm được file `index.php`, tôi sẽ thử đọc nó bằng cách chèn `;cat index.php`:
 
-![img](26)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image26.png?raw=true)
 
 Không đọc được, có thể bên server có filter, tôi thử bypass khoảng trắng bằng cách chèn `;tail${IFS}index.php` và tìm được flag:
 
-![img](27)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image27.png?raw=true)
 
 
 
