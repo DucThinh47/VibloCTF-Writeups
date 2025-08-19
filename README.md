@@ -6,6 +6,7 @@
 - [Tricky Sneaky Weby](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#tricky-sneaky-weby)
 - [Web 11](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#web-11)
 - [It's OT TIME!](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#its-ot-time)
+- [Sun* Service]()
 #### Web 7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -98,15 +99,34 @@ Truy cập trang này:
 Khi kiểm tra source code, tôi thấy nó hoàn toàn bị mã hóa, khi thử reload lại trang tôi thấy 1 ảnh khác được hiển thị rất nhanh xong lại biến mất, để ý kỹ thì bức ảnh này sẽ chứa flag.
 #### It's OT TIME!
 
-![img](20)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image20.png?raw=true)
 
 Thử click `View the source`:
 
-![img](21)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image21.png?raw=true)
 
 Một đoạn code PHP, thông qua đoạn code này, tôi hiểu rằng mình phải truyền tham số `/?magic_command` với giá trị đúng bằng `HomNayOT_EmNhe` thì mới lấy được flag, tuy nhiên nếu nhập y nguyên thì server sẽ không chấp nhận. Do đó, tôi thử lồng chính chuỗi này vào chính nó `/? magic_command=HomNayOTHomNayOT_EmNhe_EmNhe` và tìm được flag:
 
-![img](22)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image22.png?raw=true)
+#### Sun* Service
+
+![img](23)
+
+Là một trang web cho phép ping các domain được nhập. Tôi sẽ thử chèn thêm lệnh bằng cách nhập `google.com;id`:
+
+![img](24)
+
+=> Có thể lợi dụng lỗ hổng Command Injection, tiếp theo tôi thử chèn `;ls`:
+
+![img](25)
+
+Tìm được file `index.php`, tôi sẽ thử đọc nó bằng cách chèn `;cat index.php`:
+
+![img](26)
+
+Không đọc được, có thể bên server có filter, tôi thử bypass khoảng trắng bằng cách chèn `;tail${IFS}index.php` và tìm được flag:
+
+![img](27)
 
 
 
