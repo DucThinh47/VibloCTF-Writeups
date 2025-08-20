@@ -9,7 +9,7 @@
 - [Sun* Service](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#sun-service)
 - [Web13](https://github.com/DucThinh47/VibloCTF-Writeups#web13)
 - [Web6](https://github.com/DucThinh47/VibloCTF-Writeups#web6)
-- [phpinfo.php]()
+- [phpinfo.php](https://github.com/DucThinh47/VibloCTF-Writeups#phpinfophp)
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -341,7 +341,7 @@ Tuy nhiên lại tìm được cả `s_username` và `s_password`, tôi login b�
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image38.png?raw=true)
 #### phpinfo.php
 
-![img](39)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image39.png?raw=true)
 
 Đoạn code được cung cấp:
 
@@ -369,19 +369,19 @@ Dựa vào đoạn code này, có thể thấy:
 
 Tôi thử dùng `dirsearch` và tìm được URL `/phpinfo.php`:
 
-![img](40)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image40.png?raw=true)
 
 Tiếp theo tôi thử truy cập `/phpinfo.php?It=system&works=whoami`:
 
-![img](41)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image41.png?raw=true)
 
 => Thành công thực hiện câu lệnh `whoami`. Tiếp theo tôi thử chèn lệnh `ls` và tìm được 1 file khả nghi:
 
-![img](42)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image42.png?raw=true)
 
 Tiến hành đọc file này và tìm được flag:
 
-![img](43)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image43.png?raw=true)
 
 
 
