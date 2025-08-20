@@ -1,14 +1,14 @@
 # VibloCTF-Writeups
 ## Contents
 ### Web
-- [Web7]()
+- [Web7](https://github.com/DucThinh47/VibloCTF-Writeups#web7)
 - [We're out of idea, let's call it Web2](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#were-out-of-idea-lets-call-it-web2)
 - [Tricky Sneaky Weby](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#tricky-sneaky-weby)
-- [Web11]()
+- [Web11](https://github.com/DucThinh47/VibloCTF-Writeups#web11)
 - [It's OT TIME!](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#its-ot-time)
 - [Sun* Service](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#sun-service)
-- [Web13]()
-- [Web6]()
+- [Web13](https://github.com/DucThinh47/VibloCTF-Writeups#web13)
+- [Web6](https://github.com/DucThinh47/VibloCTF-Writeups#web6)
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -131,21 +131,21 @@ Không đọc được, có thể bên server có filter, tôi thử bypass kho�
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image27.png?raw=true)
 #### Web13
 
-![img](28)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image28.png?raw=true)
 
 Trang web cho phép nhập URL và trả về request header và request body khi gửi request đến URL đó:
 
-![img](29)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image29.png?raw=true)
 
-![img](30)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image30.png?raw=true)
 
 Tôi thử nhập `/etc/passwd` xem có in ra được nội dung không:
 
-![img](31)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image31.png?raw=true)
 
 Không in ra được, có thể website yêu cầu bắt buộc phải nhập vào một URL (phải bắt đầu bằng http://, https://,...), tôi nghĩ đến `URI scheme file://` để biến đường dẫn file cục bộ thành một URL hợp lệ:
 
-![img](32)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image32.png?raw=true)
 
 => Thành công, tiếp theo tôi sẽ thử đọc nội dung file `index.php` bằng cách nhập: 
 
@@ -261,18 +261,18 @@ Trong Linux có một cơ chế đặc biệt:
         <br>"
 Không thu được gì từ `index.php`. Tiếp theo tôi thử đọc file hệ thống `config.php` và tìm được flag:
 
-![img](33)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image33.png?raw=true)
 #### Web6
 
-![img](34)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image34.png?raw=true)
 
 Tôi thử nhập `admin:admin`:
 
-![img](35)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image35.png?raw=true)
 
 Tìm được một session cookie, tôi thử xem source code và tìm được đường dẫn để tải source code về:
 
-![img](36)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image36.png?raw=true)
 
 Sau khi tải, tôi tìm được file `run.py` có nội dung sau:
 
@@ -333,11 +333,11 @@ Dựa vào đoạn code có thể thấy:
 
 Tôi sẽ dùng `Flask-unsign` để brute-force secret key:
 
-![img](37)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image37.png?raw=true)
 
 Tuy nhiên lại tìm được cả `s_username` và `s_password`, tôi login bằng thông tin này và tìm được flag:
 
-![img](38)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image38.png?raw=true)
 
 
 
