@@ -18,7 +18,7 @@
 - [Amazing MD5](https://github.com/DucThinh47/VibloCTF-Writeups#amazing-md5)
 - [Wrappers bypass](https://github.com/DucThinh47/VibloCTF-Writeups#wrappers-bypass)
 - [ping pong](https://github.com/DucThinh47/VibloCTF-Writeups#ping-pong)
-- [GoToSearch]()
+- [GoToSearch](https://github.com/DucThinh47/VibloCTF-Writeups#gotosearch)
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -645,7 +645,7 @@ Trang `/ping` này dính lỗ hổng Command Injection, chèn payload và tôi �
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image76.png?raw=true)
 #### GoToSearch
 
-![img](77)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image77.png?raw=true)
 
 Đoạn code được thử thách cung cấp như sau:
 
@@ -836,19 +836,19 @@ Nghĩa là chỉ cần trong query có chuỗi "*" thì request bị chặn ngay
 
 Tôi thử nhập `{{.System "cat" "/flag.txt"}}` thì server trả về:
 
-![img](78)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image78.png?raw=true)
 
 => Thành công khai thác lỗ hổng SSTI. Tiếp theo, tôi cần tìm được file nào sẽ chứa flag, thử nhập payload để tìm ra đường dẫn hiện tại `{{.System "readlink" "/proc/self/cwd"}`:
 
-![img](79)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image79.png?raw=true)
 
 => Tìm ra đường dẫn hiện tại là `/app`. Tiếp theo, để liệt kê file nằm trong `/app`. tôi sử dụng payload `{{.System "sh" "-c" "for f in /app/f$(echo *) ; do echo $f; done"}}`:
 
-![img](80)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image80.png?raw=true)
 
 => Tìm ra file `SuperSecretFlag!!!.txt`, đọc nội dung file này và lấy được `{{.System "cat" "/app/SuperSecretFlag!!!.txt"}}`:
 
-![img](81)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image81.png?raw=true)
 
 
 
