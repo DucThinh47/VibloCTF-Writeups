@@ -14,7 +14,7 @@
 - [Login Form](https://github.com/DucThinh47/VibloCTF-Writeups#login-form)
 - [MagiC PhP](https://github.com/DucThinh47/VibloCTF-Writeups#magic-php)
 - [Enough PHP magic](https://github.com/DucThinh47/VibloCTF-Writeups#enough-php-magic)
-- [Email Template]()
+- [Email Template](https://github.com/DucThinh47/VibloCTF-Writeups#email-template)
 - [Amazing MD5]()
 #### Web7
 
@@ -553,27 +553,27 @@ Mà `$attemp` cũng đang rỗng => điều kiện true
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image56.png?raw=true)
 #### Email Template
 
-![img](57)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image57.png?raw=true)
 
 Đăng nhập vào tài khoản `user1:user1` được cung cấp sẵn:
 
-![img](58)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image58.png?raw=true)
 
 Tôi nhận được JWT token của `user1`, sau khi sử dụng tool, tôi tìm ra được secret key là `secret`:
 
-![img](59)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image59.png?raw=true)
 
 Từ đó tôi tạo ra được JWT token mới cho `admin` và sử dụng được tính năng Edit template:
 
-![img](60)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image60.png?raw=true)
 
 Tôi thử nhập `Subject` là `Jinja2` và `Body` là `{{7*7}}`:
 
-![img](61)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image61.png?raw=true)
 
 Khi click vào `Test layout content`, response từ server cho thấy website có thể dính lỗ hổng SSTI:
 
-![img](62)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image62.png?raw=true)
 
 Tiếp theo tôi nhập vào `Body` payload đọc file `flag.py`:
 
@@ -581,14 +581,14 @@ Tiếp theo tôi nhập vào `Body` payload đọc file `flag.py`:
 
 Flag được trả về:
 
-![img](63)
-# Amazing MD5
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image63.png?raw=true)
+#### Amazing MD5
 
-![img](64)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image64.png?raw=true)
 
 Dựa vào đoạn code này, tôi nghĩ đến lỗ hổng MD5 Collision, tôi sẽ gửi POST request, kèm theo tham số `a` và `b` trong body. Giá trị của 2 tham số này phải khác nhau nhưng lại có chung một giá trị MD5 hash. Tôi tìm được 2 giá trị là `240610708` và `QNKCDZO`, gửi request và tôi tìm được flag:
 
-![img](65)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image65.png?raw=true)
 
 
 
