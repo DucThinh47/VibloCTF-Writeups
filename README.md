@@ -18,6 +18,7 @@
 - [Amazing MD5](https://github.com/DucThinh47/VibloCTF-Writeups#amazing-md5)
 - [Wrappers bypass](https://github.com/DucThinh47/VibloCTF-Writeups#wrappers-bypass)
 - [ping pong](https://github.com/DucThinh47/VibloCTF-Writeups#ping-pong)
+- [GoToSearch]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -642,6 +643,213 @@ Tôi nghĩ đến lỗ hổng `XXE Injection`, tìm kiếm payload, tôi sẽ th
 Trang `/ping` này dính lỗ hổng Command Injection, chèn payload và tôi đọc được flag:
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image76.png?raw=true)
+#### GoToSearch
+
+![img](77)
+
+Đoạn code được thử thách cung cấp như sau:
+
+    package main
+
+    import (
+        "bytes"
+        "fmt"
+        "html/template"
+        "log"
+        "net/http"
+        "net/url"
+        "os"
+        "os/exec"
+        "strconv"
+        "strings"
+
+        "github.com/joho/godotenv"
+    )
+
+    var tpl = template.Must(template.ParseFiles("index.html"))
+    var blacklist = [10]string{"grep", "go", "tree", "curl", "wget", "apk", "apt", "ls", "*", "find"}
+
+    type Search struct {
+        Query      string
+        NextPage   int
+        TotalPages int
+        Results    string
+    }
+
+    func (s *Search) IsLastPage() bool {
+        return s.NextPage >= s.TotalPages
+    }
+
+    func (s *Search) CurrentPage() int {
+        if s.NextPage == 1 {
+            return s.NextPage
+        }
+
+        return s.NextPage - 1
+    }
+
+    func (u Search) System(cmd string, arg ...string) string {
+        out, _ := exec.Command(cmd, arg...).CombinedOutput()
+        return string(out)
+    }
+    func (s *Search) PreviousPage() int {
+        return s.CurrentPage() - 1
+    }
+
+    func indexHandler(w http.ResponseWriter, r *http.Request) {
+        buf := &bytes.Buffer{}
+        err := tpl.Execute(buf, nil)
+        if err != nil {
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+            return
+        }
+
+        buf.WriteTo(w)
+    }
+
+    func searchHandler() http.HandlerFunc {
+        return func(w http.ResponseWriter, r *http.Request) {
+            u, err := url.Parse(r.URL.String())
+
+            if err != nil {
+                fmt.Println(err.Error())
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+            }
+            params := u.Query()
+            searchQuery := params.Get("q")
+            for i := 0; i < 8; i++ {
+                if strings.Contains(strings.ToLower(searchQuery), strings.ToLower(blacklist[i])) {
+                    http.Error(w, "hack detected", http.StatusInternalServerError)
+                    return
+                }
+            }
+            page := params.Get("page")
+            if page == "" {
+                page = "1"
+            }
+
+            results := "test"
+
+            nextPage, err := strconv.Atoi(page)
+            if err != nil {
+                http.Error(w, err.Error(), http.StatusInternalServerError)
+                return
+            }
+
+            search := &Search{
+                Query:      searchQuery,
+                NextPage:   nextPage,
+                TotalPages: 10,
+                Results:    results,
+            }
+
+            if ok := !search.IsLastPage(); ok {
+                search.NextPage++
+            }
+            buf := &bytes.Buffer{}
+            err = tpl.Execute(buf, search)
+            if err != nil {
+                var tmpl = fmt.Sprintf(`
+                <html>
+                <h2>No search results for %s</h2>
+                </html>`, r.URL.Query()["q"][0])
+
+                t, err := template.New("page").Parse(tmpl)
+
+                if err != nil {
+                    fmt.Println(err)
+                }
+
+                t.Execute(w, &search)
+                return
+            }
+
+            buf.WriteTo(w)
+        }
+    }
+
+    func main() {
+        err := godotenv.Load()
+        if err != nil {
+            log.Println("Error loading .env file")
+        }
+
+        port := os.Getenv("PORT")
+        if port == "" {
+            port = "3000"
+        }
+
+        fs := http.FileServer(http.Dir("assets"))
+
+        mux := http.NewServeMux()
+        mux.Handle("/assets/", http.StripPrefix("/assets/", fs))
+        mux.HandleFunc("/search", searchHandler())
+        mux.HandleFunc("/", indexHandler)
+        http.ListenAndServe(":"+port, mux)
+    }
+
+Trong code có đoạn sau:
+
+    searchQuery := params.Get("q")
+    for i := 0; i < 8; i++ {
+        if strings.Contains(strings.ToLower(searchQuery), strings.ToLower(blacklist[i])) {
+            http.Error(w, "hack detected", http.StatusInternalServerError)
+            return
+        }
+    }
+
+Input từ tham số `q` sẽ bị lọc blacklist:
+
+    "grep", "go", "tree", "curl", "wget", "apk", "apt", "ls", "*", "find".
+
+=> Không được nhập trực tiếp các từ này, nếu có sẽ bị chặn. Ngoài ra, trong code có filter: 
+
+    for i := 0; i < 8; i++ {
+        if strings.Contains(strings.ToLower(searchQuery), strings.ToLower(blacklist[i])) {
+            http.Error(w, "hack detected", http.StatusInternalServerError)
+            return
+        }
+    }
+
+Nghĩa là chỉ cần trong query có chuỗi "*" thì request bị chặn ngay. Tuy nhiên, đoạn code có thể dính lỗ hổng SSTI:
+
+    err = tpl.Execute(buf, search)
+    if err != nil {
+        var tmpl = fmt.Sprintf(`
+        <html>
+        <h2>No search results for %s</h2>
+        </html>`, r.URL.Query()["q"][0])
+
+        t, err := template.New("page").Parse(tmpl)
+        if err != nil {
+            fmt.Println(err)
+        }
+
+        t.Execute(w, &search)
+        return
+    }
+
+- Biến q (tức input từ người dùng) được chèn trực tiếp vào template string (tmpl) trước khi compile
+- Dùng html/template, mặc định nó sẽ escape HTML, nên `<script>` hay thẻ HTML sẽ bị vô hiệu hóa
+- Nhưng nếu chèn cú pháp template Go `({{ ... }})` vào q, thì nó sẽ được parse và thực thi như template code
+
+Tôi thử nhập `{{.System "cat" "/flag.txt"}}` thì server trả về:
+
+![img](78)
+
+=> Thành công khai thác lỗ hổng SSTI. Tiếp theo, tôi cần tìm được file nào sẽ chứa flag, thử nhập payload để tìm ra đường dẫn hiện tại `{{.System "readlink" "/proc/self/cwd"}`:
+
+![img](79)
+
+=> Tìm ra đường dẫn hiện tại là `/app`. Tiếp theo, để liệt kê file nằm trong `/app`. tôi sử dụng payload `{{.System "sh" "-c" "for f in /app/f$(echo *) ; do echo $f; done"}}`:
+
+![img](80)
+
+=> Tìm ra file `SuperSecretFlag!!!.txt`, đọc nội dung file này và lấy được `{{.System "cat" "/app/SuperSecretFlag!!!.txt"}}`:
+
+![img](81)
+
 
 
 
