@@ -12,8 +12,10 @@
 - [phpinfo.php](https://github.com/DucThinh47/VibloCTF-Writeups#phpinfophp)
 - [Web5](https://github.com/DucThinh47/VibloCTF-Writeups#web5)
 - [Login Form](https://github.com/DucThinh47/VibloCTF-Writeups#login-form)
-- [MagiC PhP]()
-- [Enough PHP magic]()
+- [MagiC PhP](https://github.com/DucThinh47/VibloCTF-Writeups#magic-php)
+- [Enough PHP magic](https://github.com/DucThinh47/VibloCTF-Writeups#enough-php-magic)
+- [Email Template]()
+- [Amazing MD5]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -481,11 +483,11 @@ Cuối cùng tìm được flag:
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image50.png?raw=true)
 #### MagiC PhP
 
-![img](51)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image51.png?raw=true)
 
 Xem source code và tôi tìm được path `index.phps`, truy cập thì ra một đoạn mã php:
 
-![img](52)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image52.png?raw=true)
 
 Qua đoạn code, có thể thấy server so sánh chuỗi `crc32_string($value)` với `crc32_string('ecTmZcC')` bằng `==` (không phải ===).
 
@@ -502,14 +504,14 @@ Các giá trị này:
 
 Tôi thử nhập `Xe` và tìm được flag:
 
-![img](53)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image53.png?raw=true)
 #### Enough PHP magic
 
-![img](54)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image54.png?raw=true)
 
 Tôi phải tìm và nhập đúng secret thì mới trả về flag. Dùng `dirsearch` scan website, tôi tìm được path đến `/index.phps`:
 
-![img](55)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image55.png?raw=true)
 
 => Đoạn code thu được: 
 
@@ -548,7 +550,48 @@ So sánh:
 
 Mà `$attemp` cũng đang rỗng => điều kiện true
 
-![img](56)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image56.png?raw=true)
+#### Email Template
+
+![img](57)
+
+Đăng nhập vào tài khoản `user1:user1` được cung cấp sẵn:
+
+![img](58)
+
+Tôi nhận được JWT token của `user1`, sau khi sử dụng tool, tôi tìm ra được secret key là `secret`:
+
+![img](59)
+
+Từ đó tôi tạo ra được JWT token mới cho `admin` và sử dụng được tính năng Edit template:
+
+![img](60)
+
+Tôi thử nhập `Subject` là `Jinja2` và `Body` là `{{7*7}}`:
+
+![img](61)
+
+Khi click vào `Test layout content`, response từ server cho thấy website có thể dính lỗ hổng SSTI:
+
+![img](62)
+
+Tiếp theo tôi nhập vào `Body` payload đọc file `flag.py`:
+
+    {{ self.__init__.__globals__.__builtins__.__import__('os').popen('tail flag.py').read() }}
+
+Flag được trả về:
+
+![img](63)
+# Amazing MD5
+
+![img](64)
+
+Dựa vào đoạn code này, tôi nghĩ đến lỗ hổng MD5 Collision, tôi sẽ gửi POST request, kèm theo tham số `a` và `b` trong body. Giá trị của 2 tham số này phải khác nhau nhưng lại có chung một giá trị MD5 hash. Tôi tìm được 2 giá trị là `240610708` và `QNKCDZO`, gửi request và tôi tìm được flag:
+
+![img](65)
+
+
+
 
 
 
