@@ -12,6 +12,8 @@
 - [phpinfo.php](https://github.com/DucThinh47/VibloCTF-Writeups#phpinfophp)
 - [Web5](https://github.com/DucThinh47/VibloCTF-Writeups#web5)
 - [Login Form](https://github.com/DucThinh47/VibloCTF-Writeups#login-form)
+- [MagiC PhP]()
+- [Enough PHP magic]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -477,8 +479,76 @@ Tôi đã nhờ chat gpt viết một đoạn code:
 Cuối cùng tìm được flag:
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image50.png?raw=true)
+#### MagiC PhP
 
+![img](51)
 
+Xem source code và tôi tìm được path `index.phps`, truy cập thì ra một đoạn mã php:
+
+![img](52)
+
+Qua đoạn code, có thể thấy server so sánh chuỗi `crc32_string($value)` với `crc32_string('ecTmZcC')` bằng `==` (không phải ===).
+
+`crc32_string('ecTmZcC')` cho ra hex: `0e730435`. Chuỗi dạng `0e\d+` trông giống số khoa học “0 × 10^…”, nên khi so sánh bằng `==`, PHP sẽ ép cả hai về số `0` => coi là bằng nhau, dù CRC32 thật sự khác.
+
+=> Tôi chỉ cần nhập bất kỳ giá trị nào sao cho `crc32(value)` (dưới dạng hex 8 ký tự) có dạng `0e + toàn chữ số`. Ví dụ:
+- value = `Xe` => crc32_hex = 0e635074
+- value = `bN`c => crc32_hex = 0e539435
+- value = `fFU` => crc32_hex = 0e392378
+
+Các giá trị này:
+- Khác chuỗi `"ecTmZcC"` => qua được điều kiện `$value !== "ecTmZcC"`
+- Nhưng khi so sánh `crc32_string($value) == crc32_string('ecTmZcC')`, PHP coi "0e635074" == "0e730435" là đúng (cùng = 0 về mặt số học)
+
+Tôi thử nhập `Xe` và tìm được flag:
+
+![img](53)
+#### Enough PHP magic
+
+![img](54)
+
+Tôi phải tìm và nhập đúng secret thì mới trả về flag. Dùng `dirsearch` scan website, tôi tìm được path đến `/index.phps`:
+
+![img](55)
+
+=> Đoạn code thu được: 
+
+    <?php
+            $filename = 'xxxxxxxx.txt';
+            extract($_GET);
+            if (isset($attempt)) {
+                $combination = trim(file_get_contents($filename));
+                if ($attempt === $combination) {
+                    $flag = file_get_contents('xxxxxxxx.txt');
+                    echo "<p>You win! The flag is:"."$flag</p>";
+                } else {
+                    echo "<p>Wrong! The secret not is <strong>$attempt</strong></p>";
+                }
+            }
+    ?>
+
+Phân tích đoạn code có thể thấy:
+- Mặc định: `$filename = 'xxxxxxxx.txt'`
+- Nhưng lại có `extract($_GET)` => nghĩa là mọi param đưa vào URL sẽ override biến PHP có sẵn
+
+Như vậy, nếu tôi thêm tham số vào URL: `?filename=&attempt`:
+- `filename=` => gán `$filename = ""`
+- Tham số `attempt` không có giá trị nào, nhưng vì chỉ cần `isset($attempt)` nên biến `$attempt` tồn tại (dù rỗng)
+
+Lúc này:
+
+    $combination = trim(file_get_contents($filename)); 
+
+=> `file_get_contents("")` => lỗi / trả về `false` 
+=> `$combination = ""` (sau khi trim)
+
+So sánh:
+
+    if ($attempt === $combination) { ... }
+
+Mà `$attemp` cũng đang rỗng => điều kiện true
+
+![img](56)
 
 
 
