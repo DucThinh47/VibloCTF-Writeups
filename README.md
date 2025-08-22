@@ -15,7 +15,9 @@
 - [MagiC PhP](https://github.com/DucThinh47/VibloCTF-Writeups#magic-php)
 - [Enough PHP magic](https://github.com/DucThinh47/VibloCTF-Writeups#enough-php-magic)
 - [Email Template](https://github.com/DucThinh47/VibloCTF-Writeups#email-template)
-- [Amazing MD5]()
+- [Amazing MD5](https://github.com/DucThinh47/VibloCTF-Writeups#amazing-md5)
+- [Wrappers bypass]()
+- [ping pong]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -589,6 +591,59 @@ Flag được trả về:
 Dựa vào đoạn code này, tôi nghĩ đến lỗ hổng MD5 Collision, tôi sẽ gửi POST request, kèm theo tham số `a` và `b` trong body. Giá trị của 2 tham số này phải khác nhau nhưng lại có chung một giá trị MD5 hash. Tôi tìm được 2 giá trị là `240610708` và `QNKCDZO`, gửi request và tôi tìm được flag:
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image65.png?raw=true)
+#### Wrappers bypass
+
+![img](66)
+
+Thử click vào `click me?no`:
+
+![img](67)
+
+Có thể thấy tham số `file` có giá trị là `show.php` được thêm vào query. Dựa vào tên thử thách: `Wrappers bypass`, tôi nghĩ đến `wrapper php://filter` - một stream wrapper đặc biệt trong PHP, cho phép áp dụng các bộ lọc lên file trước khi đưa cho PHP xử lý.
+
+Nếu tôi thay giá trị của `file` thành `php://filter/convert.base64-encode/resource=index.php`, thì filter ở đây là `convert.base64-encode`, nghĩa là thay vì thực thi code trong `index.php`, PHP sẽ đọc toàn bộ file `index.php`, encode nó thành base64, rồi trả thẳng về output:
+
+![img](68)
+
+Decode chuỗi base64 này, output là nội dung file `index.php` kèm theo flag:
+
+![img](69)
+#### ping pong
+
+![img](70)
+
+Tôi thử nhập `admin:admin`, request `/doLogin` và response có dạng như sau:
+
+![img](71)
+
+Tôi nghĩ đến lỗ hổng `XXE Injection`, tìm kiếm payload, tôi sẽ thử gửi request `/doLogin` với phần body như sau:
+
+    <?xml version="1.0"?>
+    <!DOCTYPE foo [ <!ENTITY xxe SYSTEM "file:///etc/passwd"> ]>
+    <user>
+    <username>&xxe;</username>
+    <password>123</password>
+    </user>
+
+![img](72)
+
+=> Thành công trả về nội dung `/etc/passwd`. Tiếp theo tôi thử gửi payload để đọc nội dung file `/proc/self/cwd/app.py`:
+
+![img](73)
+
+=> Tìm được tài khoản mật khẩu để login `Sup3rS3cr3t@dminUs3rN@m3:Sup3rS3cr3tP@ssW0rd@dmin`:
+
+![img](74)
+
+=> Vào được trang `/admin`, click `Ping`:
+
+![img](75)
+
+Trang `/ping` này dính lỗ hổng Command Injection, chèn payload và tôi đọc được flag:
+
+![img](76)
+
+
 
 
 
