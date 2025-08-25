@@ -23,6 +23,7 @@
 - [FeedBack Form](https://github.com/DucThinh47/VibloCTF-Writeups#feedback-form)
 - [King Of Regexing]()
 - [Are you a robot?]()
+- [Site ownership]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -941,8 +942,37 @@ File robots.txt:
 ![img](93)
 
 ![img](94)
+#### Site ownership
 
+![img](95)
 
+Mô tả thử thách đặt ra câu hỏi *How does google know that I'm the site owner?*
+
+=> Google cho phép `3 cách` verify site ownership:
+
+`Meta tag`:
+
+![img](96)
+
+Giải mã tìm được: `Flag{FIRST_Site_THIRD}`
+
+`HTML file`:
+
+![img](97)
+
+![img](98)
+
+Giải mã tìm được: `Flag{FIRST_SECOND_Verified}`
+
+`DNS TXT record` => thông tin thử thách cung cấp:
+
+    TYPE = TXT
+    NAME = domain.com
+    CONTENT = google-site-verification=466c61677b4d795f5345434f4e445f54484952447d
+
+Giải mã tìm được: `Flag{My_SECOND_THIRD}`
+
+Cuối cùng ghép lại tìm được flag là `Flag{My_Site_Verified}`
 
 
 
