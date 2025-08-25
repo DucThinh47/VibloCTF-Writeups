@@ -19,8 +19,8 @@
 - [Wrappers bypass](https://github.com/DucThinh47/VibloCTF-Writeups#wrappers-bypass)
 - [ping pong](https://github.com/DucThinh47/VibloCTF-Writeups#ping-pong)
 - [GoToSearch](https://github.com/DucThinh47/VibloCTF-Writeups#gotosearch)
-- [Password Verify]()
-- [FeedBack Form]()
+- [Password Verify](https://github.com/DucThinh47/VibloCTF-Writeups#password-verify)
+- [FeedBack Form](https://github.com/DucThinh47/VibloCTF-Writeups#feedback-form)
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -853,7 +853,7 @@ Tôi thử nhập `{{.System "cat" "/flag.txt"}}` thì server trả về:
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image81.png?raw=true)
 #### Password Verify
 
-![img](82)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image82.png?raw=true)
 
 Một thử thách có vẻ là SQLi, server sẽ kiểm tra `POST` request.
 
@@ -861,30 +861,30 @@ Trong phần body sẽ kiểm tra `username` và `password` nếu chứa `submit
 
 Tôi thử gửi POST request chứa `search_user_exist` và 2 tham số `username=admin` và `name=admin`:
 
-![img](83)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image83.png?raw=true)
 
 => Có tồn tại `username:admin`. Bây giờ để login vào, tôi sẽ thực hiện brute-force password vì filter từ server khá chặt, khó chèn payload SQLi, tìm ra password rồi thì gửi request chứa `submit_login` để lấy flag:
 
-![img](84)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image84.png?raw=true)
 #### FeedBack Form
 
-![img](85)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image85.png?raw=true)
 
 Là một submit form, tôi thử dùng `dirsearch` và tìm được endpoint `/sitemap.xml`:
 
-![img](86)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image86.png?raw=true)
 
 Truy cập `/sitemap.xml`, tôi tìm được 2 endpoint ẩn khác:
 
-![img](87)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image87.png?raw=true)
 
 Thử truy cập `/s3cr3t_fl4g` nhưng không có quyền, trở lại trang chính, tôi thử điền đủ thông tin và submit thì server trả về cookie tên là `userID`:
 
-![img](88)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image88.png?raw=true)
 
 Decode giá trị base64 này thì ra `user`, tôi thay vào giá trị `admin` được encode base64, truy cập thành công vào `/s3cr3t_fl4g` và lấy được flag:
 
-![img](89)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image89.png?raw=true)
 
 
 
