@@ -19,6 +19,8 @@
 - [Wrappers bypass](https://github.com/DucThinh47/VibloCTF-Writeups#wrappers-bypass)
 - [ping pong](https://github.com/DucThinh47/VibloCTF-Writeups#ping-pong)
 - [GoToSearch](https://github.com/DucThinh47/VibloCTF-Writeups#gotosearch)
+- [Password Verify]()
+- [FeedBack Form]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -849,6 +851,42 @@ Tôi thử nhập `{{.System "cat" "/flag.txt"}}` thì server trả về:
 => Tìm ra file `SuperSecretFlag!!!.txt`, đọc nội dung file này và lấy được `{{.System "cat" "/app/SuperSecretFlag!!!.txt"}}`:
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image81.png?raw=true)
+#### Password Verify
+
+![img](82)
+
+Một thử thách có vẻ là SQLi, server sẽ kiểm tra `POST` request.
+
+Trong phần body sẽ kiểm tra `username` và `password` nếu chứa `submit_login`, còn nếu chứa `search_user_exist` thì sẽ kiểm tra `username` và `name`. 
+
+Tôi thử gửi POST request chứa `search_user_exist` và 2 tham số `username=admin` và `name=admin`:
+
+![img](83)
+
+=> Có tồn tại `username:admin`. Bây giờ để login vào, tôi sẽ thực hiện brute-force password vì filter từ server khá chặt, khó chèn payload SQLi, tìm ra password rồi thì gửi request chứa `submit_login` để lấy flag:
+
+![img](84)
+#### FeedBack Form
+
+![img](85)
+
+Là một submit form, tôi thử dùng `dirsearch` và tìm được endpoint `/sitemap.xml`:
+
+![img](86)
+
+Truy cập `/sitemap.xml`, tôi tìm được 2 endpoint ẩn khác:
+
+![img](87)
+
+Thử truy cập `/s3cr3t_fl4g` nhưng không có quyền, trở lại trang chính, tôi thử điền đủ thông tin và submit thì server trả về cookie tên là `userID`:
+
+![img](88)
+
+Decode giá trị base64 này thì ra `user`, tôi thay vào giá trị `admin` được encode base64, truy cập thành công vào `/s3cr3t_fl4g` và lấy được flag:
+
+![img](89)
+
+
 
 
 
