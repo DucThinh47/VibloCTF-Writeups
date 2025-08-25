@@ -24,6 +24,7 @@
 - [King Of Regexing](https://github.com/DucThinh47/VibloCTF-Writeups#king-of-regexing)
 - [Are you a robot?](https://github.com/DucThinh47/VibloCTF-Writeups#are-you-a-robot)
 - [Site ownership](https://github.com/DucThinh47/VibloCTF-Writeups#site-ownership)
+- [Logged Now]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -973,6 +974,54 @@ Giải mã tìm được: `Flag{FIRST_SECOND_Verified}`
 Giải mã tìm được: `Flag{My_SECOND_THIRD}`
 
 Cuối cùng ghép lại tìm được flag là `Flag{My_Site_Verified}`
+#### Logged Now
+
+![img](99)
+
+Tôi thử xem source page và tìm được thông tin login `test:test`:
+
+![img](100)
+
+Thử đăng nhập với thông tin này, lúc này server sẽ trả về 1 JWT cookie:
+
+![img](101)
+
+Thử decode:
+
+![img](102)
+
+Trong JWT body có tham số `username=test` và `islogged=true`. Ý tưởng của tôi lúc này là tạo ra 1 JWT với `username=admin` và `islogged=true`. 
+
+Đăng xuất, tôi đã thử sửa chay JWT và thay vào nhưng mỗi lần reload tham số `islogged` sẽ bị set về `false`, đồng thời tôi cũng đã thử dùng tool để tìm ra secret key nhưng không tìm được. 
+
+Tiếp theo, tôi thử xem chức năng `Forgot password`:
+
+![img](103)
+
+Kiểm tra trong request và response, tôi để ý rằng 2 giá trị JWT trước và sau khi submit là khác nhau:
+
+![img](104)
+
+JWT trong request khi decode là:
+
+![img](105)
+
+JWT trong response khi decode là:
+
+![img](106)
+
+=> Server sẽ lấy giá trị tham số `username` trong request để thay vào JWT. Như vậy để tạo ra JWT có `username=admin` và `islogged=true`, tôi thử lấy JWT của account `test:test` thay vào JWT trong `/Forgot password` request, sau đó set tham số `username` trong request là `admin`:
+
+![img](107)
+
+Thử decode JWT này:
+
+![img](108)
+
+=> Thành công, bây giờ chỉ cần thay JWT trên trình duyệt và tìm được flag:
+
+![img](109)
+
 
 
 
