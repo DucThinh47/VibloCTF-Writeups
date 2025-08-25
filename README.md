@@ -21,9 +21,9 @@
 - [GoToSearch](https://github.com/DucThinh47/VibloCTF-Writeups#gotosearch)
 - [Password Verify](https://github.com/DucThinh47/VibloCTF-Writeups#password-verify)
 - [FeedBack Form](https://github.com/DucThinh47/VibloCTF-Writeups#feedback-form)
-- [King Of Regexing]()
-- [Are you a robot?]()
-- [Site ownership]()
+- [King Of Regexing](https://github.com/DucThinh47/VibloCTF-Writeups#king-of-regexing)
+- [Are you a robot?](https://github.com/DucThinh47/VibloCTF-Writeups#are-you-a-robot)
+- [Site ownership](https://github.com/DucThinh47/VibloCTF-Writeups#site-ownership)
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -890,11 +890,11 @@ Decode giá trị base64 này thì ra `user`, tôi thay vào giá trị `admin` 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image89.png?raw=true)
 #### King Of Regexing
 
-![img](90)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image90.png?raw=true)
 
 Thử truy cập `/server`, server trả về đoạn code sau:
 
-![img](91)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image91.png?raw=true)
 
 => Endpoint `/payload` trong server:
 
@@ -934,17 +934,17 @@ Ví dụ: `"open"`, `"read"`, `"next"`, `"tuple"`, `"join"`… đều fail. Như
 
     /payload?cmd=%5B*_%28"%5C146%5C154%5C141%5C147%5C056%5C164%5C170%5C164"%29%5D
 
-![img](92)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image92.png?raw=true)
 #### Are you a robot?
 
 File robots.txt:
 
-![img](93)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image93.png?raw=true)
 
-![img](94)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image94.png?raw=true)
 #### Site ownership
 
-![img](95)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image95.png?raw=true)
 
 Mô tả thử thách đặt ra câu hỏi *How does google know that I'm the site owner?*
 
@@ -952,15 +952,15 @@ Mô tả thử thách đặt ra câu hỏi *How does google know that I'm the si
 
 `Meta tag`:
 
-![img](96)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image96.png?raw=true)
 
 Giải mã tìm được: `Flag{FIRST_Site_THIRD}`
 
 `HTML file`:
 
-![img](97)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image97.png?raw=true)
 
-![img](98)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image98.png?raw=true)
 
 Giải mã tìm được: `Flag{FIRST_SECOND_Verified}`
 
