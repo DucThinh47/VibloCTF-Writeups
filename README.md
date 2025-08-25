@@ -24,7 +24,7 @@
 - [King Of Regexing](https://github.com/DucThinh47/VibloCTF-Writeups#king-of-regexing)
 - [Are you a robot?](https://github.com/DucThinh47/VibloCTF-Writeups#are-you-a-robot)
 - [Site ownership](https://github.com/DucThinh47/VibloCTF-Writeups#site-ownership)
-- [Logged Now]()
+- [Logged Now](https://github.com/DucThinh47/VibloCTF-Writeups#logged-now)
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -976,19 +976,19 @@ Giải mã tìm được: `Flag{My_SECOND_THIRD}`
 Cuối cùng ghép lại tìm được flag là `Flag{My_Site_Verified}`
 #### Logged Now
 
-![img](99)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image99.png?raw=true)
 
 Tôi thử xem source page và tìm được thông tin login `test:test`:
 
-![img](100)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image100.png?raw=true)
 
 Thử đăng nhập với thông tin này, lúc này server sẽ trả về 1 JWT cookie:
 
-![img](101)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image101.png?raw=true)
 
 Thử decode:
 
-![img](102)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image102.png?raw=true)
 
 Trong JWT body có tham số `username=test` và `islogged=true`. Ý tưởng của tôi lúc này là tạo ra 1 JWT với `username=admin` và `islogged=true`. 
 
@@ -996,31 +996,31 @@ Trong JWT body có tham số `username=test` và `islogged=true`. Ý tưởng c�
 
 Tiếp theo, tôi thử xem chức năng `Forgot password`:
 
-![img](103)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image103.png?raw=true)
 
 Kiểm tra trong request và response, tôi để ý rằng 2 giá trị JWT trước và sau khi submit là khác nhau:
 
-![img](104)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image104.png?raw=true)
 
 JWT trong request khi decode là:
 
-![img](105)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image105.png?raw=true)
 
 JWT trong response khi decode là:
 
-![img](106)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image106.png?raw=true)
 
 => Server sẽ lấy giá trị tham số `username` trong request để thay vào JWT. Như vậy để tạo ra JWT có `username=admin` và `islogged=true`, tôi thử lấy JWT của account `test:test` thay vào JWT trong `/Forgot password` request, sau đó set tham số `username` trong request là `admin`:
 
-![img](107)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image107.png?raw=true)
 
 Thử decode JWT này:
 
-![img](108)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image108.png?raw=true)
 
 => Thành công, bây giờ chỉ cần thay JWT trên trình duyệt và tìm được flag:
 
-![img](109)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image109.png?raw=true)
 
 
 
