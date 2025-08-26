@@ -25,6 +25,7 @@
 - [Are you a robot?](https://github.com/DucThinh47/VibloCTF-Writeups#are-you-a-robot)
 - [Site ownership](https://github.com/DucThinh47/VibloCTF-Writeups#site-ownership)
 - [Logged Now](https://github.com/DucThinh47/VibloCTF-Writeups#logged-now)
+- [JWTToken]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1021,11 +1022,53 @@ Thử decode JWT này:
 => Thành công, bây giờ chỉ cần thay JWT trên trình duyệt và tìm được flag:
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image109.png?raw=true)
+#### JWTToken
 
+![img](110)
 
+Thử nhập `admin` và Sign in:
 
+![img](111)
 
+Ra một trang upload file, tôi đã thử lợi dụng lỗ hổng file upload nhưng có vẻ không thành công.
 
+Kiểm tra source code, tôi phát hiện ra một file tên `/getflag.js`, nội dung đoạn code như sau:
+
+![img](112)
+
+=> Đoạn code này tự động gửi request GET tới `/getflag` và hiển thị nội dung flag. Thử truy cập `/getflag`:
+
+![img](113)
+
+=> Server trả về `You are not approved`, thử kiểm tra xem có tồn tại cookie không và tôi tìm được:
+
+![img](114)
+
+Decode JWT này:
+
+![img](115)
+
+=> JWT được ký bằng thuật toán RS256 với 2 cặp khóa public và private. Ý tưởng của tôi tạo một JWT mới với `username=admin` và `approve:true`, để làm vậy tôi cần public key mới. Tôi để ý trong JWT header có tham số `iss=http://localhost:5000/static/keys.pub`, thông thường tham số này sẽ nằm ở body chứ không phải header và `iss` chính là "chữ ký phát hành" ghi rõ ai là cha đẻ của cái token.
+
+Việc `iss` nằm ở header có vẻ như là một custom, dùng để chỉ định đường dẫn của public key.
+
+Kiểm tra lại request, tôi tìm được đường dẫn lưu file được upload lên server:
+
+![img](116)
+
+![img](117)
+
+=> ý tưởng của tôi lúc này là sẽ sử dụng private key để tạo một public key mới và tạo JWT mới:
+
+![img](118)
+
+Tuy nhiên, server không chấp nhận upload file `.pem` nên cần đổi thành `.txt`, sau đó tôi sẽ tạo JWT mới bằng cách thay giá trị tham số `iss` thành đường dẫn `http://localhost:5000/uploads/admin/public.txt`:
+
+![img](119)
+
+Thử truy cập `/getflag` với JWT mới và tìm được flag:
+
+![img](120)
 
 
 
