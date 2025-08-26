@@ -25,7 +25,7 @@
 - [Are you a robot?](https://github.com/DucThinh47/VibloCTF-Writeups#are-you-a-robot)
 - [Site ownership](https://github.com/DucThinh47/VibloCTF-Writeups#site-ownership)
 - [Logged Now](https://github.com/DucThinh47/VibloCTF-Writeups#logged-now)
-- [JWTToken]()
+- [JWTToken](https://github.com/DucThinh47/VibloCTF-Writeups#jwttoken)
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1024,51 +1024,51 @@ Thử decode JWT này:
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image109.png?raw=true)
 #### JWTToken
 
-![img](110)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image110.png?raw=true)
 
 Thử nhập `admin` và Sign in:
 
-![img](111)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image111.png?raw=true)
 
 Ra một trang upload file, tôi đã thử lợi dụng lỗ hổng file upload nhưng có vẻ không thành công.
 
 Kiểm tra source code, tôi phát hiện ra một file tên `/getflag.js`, nội dung đoạn code như sau:
 
-![img](112)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image112.png?raw=true)
 
 => Đoạn code này tự động gửi request GET tới `/getflag` và hiển thị nội dung flag. Thử truy cập `/getflag`:
 
-![img](113)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image113.png?raw=true)
 
 => Server trả về `You are not approved`, thử kiểm tra xem có tồn tại cookie không và tôi tìm được:
 
-![img](114)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image114.png?raw=true)
 
 Decode JWT này:
 
-![img](115)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image115.png?raw=true)
 
-=> JWT được ký bằng thuật toán RS256 với 2 cặp khóa public và private. Ý tưởng của tôi tạo một JWT mới với `username=admin` và `approve:true`, để làm vậy tôi cần public key mới. Tôi để ý trong JWT header có tham số `iss=http://localhost:5000/static/keys.pub`, thông thường tham số này sẽ nằm ở body chứ không phải header và `iss` chính là "chữ ký phát hành" ghi rõ ai là cha đẻ của cái token.
+=> JWT được ký bằng thuật toán RS256 với 2 cặp khóa public và private. Ý tưởng của tôi tạo một JWT mới với `username=admin` và `approve:true`, để làm vậy tôi cần public key mới. Tôi để ý trong JWT header có tham số `iss=http://localhost:5000/static/keys.pub`, thông thường tham số này sẽ nằm ở body chứ không phải header và `iss` chính là "chữ ký phát hành" ghi rõ ai là cha đẻ của token.
 
 Việc `iss` nằm ở header có vẻ như là một custom, dùng để chỉ định đường dẫn của public key.
 
 Kiểm tra lại request, tôi tìm được đường dẫn lưu file được upload lên server:
 
-![img](116)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image116.png?raw=true)
 
-![img](117)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image117.png?raw=true)
 
-=> ý tưởng của tôi lúc này là sẽ sử dụng private key để tạo một public key mới và tạo JWT mới:
+=> Ý tưởng của tôi lúc này là sẽ sử dụng private key để tạo một public key mới và tạo JWT mới:
 
-![img](118)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image118.png?raw=true)
 
 Tuy nhiên, server không chấp nhận upload file `.pem` nên cần đổi thành `.txt`, sau đó tôi sẽ tạo JWT mới bằng cách thay giá trị tham số `iss` thành đường dẫn `http://localhost:5000/uploads/admin/public.txt`:
 
-![img](119)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image119.png?raw=true)
 
 Thử truy cập `/getflag` với JWT mới và tìm được flag:
 
-![img](120)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image120.png?raw=true)
 
 
 
