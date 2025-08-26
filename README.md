@@ -26,7 +26,8 @@
 - [Site ownership](https://github.com/DucThinh47/VibloCTF-Writeups#site-ownership)
 - [Logged Now](https://github.com/DucThinh47/VibloCTF-Writeups#logged-now)
 - [JWTToken](https://github.com/DucThinh47/VibloCTF-Writeups#jwttoken)
-- [long leg]()
+- [long leg](https://github.com/DucThinh47/VibloCTF-Writeups#long-leg)
+- [JS is Awesome!]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1072,23 +1073,23 @@ Thử truy cập `/getflag` với JWT mới và tìm được flag:
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image120.png?raw=true)
 ##### long leg
 
-![img](121)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image121.png?raw=true)
 
 Thử truy cập `/his-feet`, file `his-feet` được tự động tải về, nội dung của file là flag:
 
-![img](122)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image122.png?raw=true)
 
-![img](123)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image123.png?raw=true)
 
 #### JS is Awesome!
 
-![img](124)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image124.png?raw=true)
 
 Một trang cho phép nhập password, có vẻ như nếu nhập đúng password thì flag sẽ được trả về. 
 
 Kiểm tra source code thì thấy một đoạn JS được obfuscation:
 
-![img](125)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image125.png?raw=true)
 
 Ý tưởng của tôi là tìm được nội dung đoạn code JS này, cách nhanh nhất là hook hoặc inspect event handler để xem code thật. Mở dev tools, chạy đoạn JS:
 
@@ -1103,7 +1104,7 @@ Kiểm tra source code thì thấy một đoạn JS được obfuscation:
 
     h && console.log(h.toString());
 
-![img](126)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image126.png?raw=true)
 
 => Kết quả trả về là đoạn code đã được "giải nén":
 
@@ -1115,7 +1116,10 @@ Kiểm tra source code thì thấy một đoạn JS được obfuscation:
 
 => Giải mã base64 giá trị `bmljZV9jb2Rl` sẽ ra `nice_code` và đây chính là mật khẩu đúng cần nhập để trả về flag có giá trị `=0XI0FGa09FZhVmcfV3b59FduF2Yfd3bot3ZhxmR`, trông như 1 giá trị base64 bị đảo ngược, chỉ cần đảo lại và decode:
 
-![img](127)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image127.png?raw=true)
+
+
+
 
 
 
