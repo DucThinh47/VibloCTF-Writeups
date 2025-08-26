@@ -26,6 +26,7 @@
 - [Site ownership](https://github.com/DucThinh47/VibloCTF-Writeups#site-ownership)
 - [Logged Now](https://github.com/DucThinh47/VibloCTF-Writeups#logged-now)
 - [JWTToken](https://github.com/DucThinh47/VibloCTF-Writeups#jwttoken)
+- [long leg]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1069,6 +1070,54 @@ Tuy nhiên, server không chấp nhận upload file `.pem` nên cần đổi th�
 Thử truy cập `/getflag` với JWT mới và tìm được flag:
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image120.png?raw=true)
+##### long leg
+
+![img](121)
+
+Thử truy cập `/his-feet`, file `his-feet` được tự động tải về, nội dung của file là flag:
+
+![img](122)
+
+![img](123)
+
+#### JS is Awesome!
+
+![img](124)
+
+Một trang cho phép nhập password, có vẻ như nếu nhập đúng password thì flag sẽ được trả về. 
+
+Kiểm tra source code thì thấy một đoạn JS được obfuscation:
+
+![img](125)
+
+Ý tưởng của tôi là tìm được nội dung đoạn code JS này, cách nhanh nhất là hook hoặc inspect event handler để xem code thật. Mở dev tools, chạy đoạn JS:
+
+    const form = document.querySelector('form');
+    const btn  = document.getElementById('submit');
+
+    const h =
+    form?.onsubmit
+    || (getEventListeners(form)?.submit?.[0]?.listener)
+    || btn?.onclick
+    || (getEventListeners(btn)?.click?.[0]?.listener);
+
+    h && console.log(h.toString());
+
+![img](126)
+
+=> Kết quả trả về là đoạn code đã được "giải nén":
+
+    function(){
+    document.getElementById("pass").value == atob("bmljZV9jb2Rl")
+        ? (alert("Nice!"), "=0XI0FGa09FZhVmcfV3b59FduF2Yfd3bot3ZhxmR".split("").reverse().join(""))
+        : alert("Wrong!");
+    }
+
+=> Giải mã base64 giá trị `bmljZV9jb2Rl` sẽ ra `nice_code` và đây chính là mật khẩu đúng cần nhập để trả về flag có giá trị `=0XI0FGa09FZhVmcfV3b59FduF2Yfd3bot3ZhxmR`, trông như 1 giá trị base64 bị đảo ngược, chỉ cần đảo lại và decode:
+
+![img](127)
+
+
 
 
 
