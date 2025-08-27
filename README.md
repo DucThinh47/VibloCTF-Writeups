@@ -28,6 +28,7 @@
 - [JWTToken](https://github.com/DucThinh47/VibloCTF-Writeups#jwttoken)
 - [long leg](https://github.com/DucThinh47/VibloCTF-Writeups#long-leg)
 - [JS is Awesome!]()
+- [Media Library]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1117,6 +1118,24 @@ Kiểm tra source code thì thấy một đoạn JS được obfuscation:
 => Giải mã base64 giá trị `bmljZV9jb2Rl` sẽ ra `nice_code` và đây chính là mật khẩu đúng cần nhập để trả về flag có giá trị `=0XI0FGa09FZhVmcfV3b59FduF2Yfd3bot3ZhxmR`, trông như 1 giá trị base64 bị đảo ngược, chỉ cần đảo lại và decode:
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image127.png?raw=true)
+
+#### Media Library
+
+Trang web:
+
+![img](128)
+
+Dùng dirsearch và tôi phát hiện ra các endpoint ẩn liên quan đến `/.git/` :
+
+![img](129)
+
+=> Ý tưởng của tôi là dump repo => git checkout => đọc source code. Sử dụng tool [git_dumper](https://github.com/arthaud/git-dumper) để dump `.git`:
+
+![img](130)
+
+Sau đó chỉ cần mở source sau khi checkout và tìm được flag:
+
+![img](131)
 
 
 
