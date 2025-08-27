@@ -27,8 +27,9 @@
 - [Logged Now](https://github.com/DucThinh47/VibloCTF-Writeups#logged-now)
 - [JWTToken](https://github.com/DucThinh47/VibloCTF-Writeups#jwttoken)
 - [long leg](https://github.com/DucThinh47/VibloCTF-Writeups#long-leg)
-- [JS is Awesome!]()
-- [Media Library]()
+- [JS is Awesome!](https://github.com/DucThinh47/VibloCTF-Writeups#js-is-awesome)
+- [Media Library](https://github.com/DucThinh47/VibloCTF-Writeups#media-library)
+- [Hide and seek]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1123,22 +1124,31 @@ Kiểm tra source code thì thấy một đoạn JS được obfuscation:
 
 Trang web:
 
-![img](128)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image128.png?raw=true)
 
 Dùng dirsearch và tôi phát hiện ra các endpoint ẩn liên quan đến `/.git/` :
 
-![img](129)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image129.png?raw=true)
 
 => Ý tưởng của tôi là dump repo => git checkout => đọc source code. Sử dụng tool [git_dumper](https://github.com/arthaud/git-dumper) để dump `.git`:
 
-![img](130)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image130.png?raw=true)
 
 Sau đó chỉ cần mở source sau khi checkout và tìm được flag:
 
-![img](131)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image131.png?raw=true)
 
+#### Hide and seek
 
+![img](132)
 
+Như mô tả của thử thách: `Source code is everything!!`, kiểm tra source code, kiểm tra file `/static/bootstrap.min.js`: 
+
+![img](133)
+
+=> Tìm ra endpoint `/secret-terces007`, truy cập và tìm ra flag:
+
+![img](135)
 
 
 
