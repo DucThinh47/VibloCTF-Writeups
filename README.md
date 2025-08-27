@@ -30,9 +30,9 @@
 - [JS is Awesome!](https://github.com/DucThinh47/VibloCTF-Writeups#js-is-awesome)
 - [Media Library](https://github.com/DucThinh47/VibloCTF-Writeups#media-library)
 - [Hide and seek](https://github.com/DucThinh47/VibloCTF-Writeups#hide-and-seek)
-- [Lucky Number]()
-- [Login with js]()
-- [Config Basic]()
+- [Lucky Number](https://github.com/DucThinh47/VibloCTF-Writeups#lucky-number)
+- [Login with js](https://github.com/DucThinh47/VibloCTF-Writeups#login-with-js)
+- [Config Basic](https://github.com/DucThinh47/VibloCTF-Writeups#config-basic)
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1157,7 +1157,7 @@ Như mô tả của thử thách: `Source code is everything!!`, kiểm tra sour
 
 #### Lucky Number
 
-![img](136)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image136.png?raw=true)
 
 Đoạn php được cung cấp:
 
@@ -1187,14 +1187,14 @@ Muốn server trả về `“Bingoo!!”` tôi cần một input:
 
 Tôi thử nhập `9999.` và tìm được flag:
 
-![img](137)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image137.png?raw=true)
 #### Login with js
 
-![img](138)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image138.png?raw=true)
 
 Kiểm tra source code, tôi tìm được đoạn JS sau, đồng thời tìm thêm 2 file `aes.js` và `sha256.js`:
 
-![img](139)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image139.png?raw=true)
 
 => Đoạn code này sẽ check:
 - Username phải là `admin`
@@ -1217,11 +1217,11 @@ Tôi sẽ dùng CryptoJS console (trình duyệt đã load sẵn lib) để gi�
 
 => Mật khẩu là `VibloCTFsolove`. Tiếp theo, login với account `admin:VibloCTFsolove` và tìm được flag:
 
-![img](141)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image141.png?raw=true)
 
 #### Config Basic
 
-![img](142)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image142.png?raw=true)
 
 Thấy rằng server sử dụng:
 
@@ -1230,7 +1230,7 @@ Thấy rằng server sử dụng:
     }
 => Khi sử dụng `alias` mà không có dấu gạch chéo ở phía sau `/static`, không phải `/static/`, `nginx` sẽ lấy phần sau `/static` và chỉ cần thêm nó vào đường dẫn `alias`, cho phép đọc file hệ thống. Tôi thử truy cập `/static../flag.txt` và tìm được flag:
 
-![img](143)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image143.png?raw=true)
 
 
 
