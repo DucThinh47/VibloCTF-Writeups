@@ -30,6 +30,9 @@
 - [JS is Awesome!](https://github.com/DucThinh47/VibloCTF-Writeups#js-is-awesome)
 - [Media Library](https://github.com/DucThinh47/VibloCTF-Writeups#media-library)
 - [Hide and seek](https://github.com/DucThinh47/VibloCTF-Writeups#hide-and-seek)
+- [Lucky Number]()
+- [Login with js]()
+- [Config Basic]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1152,10 +1155,82 @@ Như mô tả của thử thách: `Source code is everything!!`, kiểm tra sour
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image135.png?raw=true)
 
+#### Lucky Number
 
+![img](136)
 
+Đoạn php được cung cấp:
 
+    if(isset($_POST["number"])){
+        $Luckynumber = "9999";
+        if($_POST["number"] === "9999"){
+            $_POST["number"] = "9998";
+        }
+        if($_POST["number"] == $Luckynumber){
+            if(preg_match("/0/", $_POST["number"]) === 0){
+                echo "Bingoo!! " . $flag;
+            } else{
+                echo "Nice number, Good Luck!";
+            }
+                            
+        } else{
+            echo "Looks like it is not so lucky ^-^";
+        }
+    } else {
+            print "Lets choose a lucky number today!";
+        }
 
+Muốn server trả về `“Bingoo!!”` tôi cần một input:
+- Không đúng bằng `(===) “9999”` để né việc bị đổi thành “9998”
+- Lại bằng `(==) “9999”` theo so sánh lỏng
+- Không chứa ký tự `‘0’` (regex /0/ phải không match)
+
+Tôi thử nhập `9999.` và tìm được flag:
+
+![img](137)
+#### Login with js
+
+![img](138)
+
+Kiểm tra source code, tôi tìm được đoạn JS sau, đồng thời tìm thêm 2 file `aes.js` và `sha256.js`:
+
+![img](139)
+
+=> Đoạn code này sẽ check:
+- Username phải là `admin`
+- Password được mã hóa `AES-CBC` với key/iv sinh từ SHA256 chuỗi `\x23\x33\x12\x39\x53\x22\x12\xa3\xb3\xc8\xd3\xe3\xf7`
+- Ciphertext so sánh với base64: `2c9qK4QJrMm3ApBN/yQhvA==`
+
+Tôi sẽ dùng CryptoJS console (trình duyệt đã load sẵn lib) để giải mã ciphertext:
+
+    var k = CryptoJS.SHA256("\x23\x33\x12\x39\x53\x22\x12\xa3\xb3\xc8\xd3\xe3\xf7");
+    var key = CryptoJS.enc.Hex.parse(k.toString().substring(0, 32));
+    var iv  = CryptoJS.enc.Hex.parse(k.toString().substring(32, 64));
+    var ctB64 = "2c9qK4QJrMm3ApBN/yQhvA==";
+
+    var pt = CryptoJS.AES.decrypt(
+    {ciphertext: CryptoJS.enc.Base64.parse(ctB64)},
+    key,
+    { iv: iv, padding: CryptoJS.pad.Pkcs7, mode: CryptoJS.mode.CBC }
+    );
+    console.log(pt.toString(CryptoJS.enc.Utf8));
+
+=> Mật khẩu là `VibloCTFsolove`. Tiếp theo, login với account `admin:VibloCTFsolove` và tìm được flag:
+
+![img](141)
+
+#### Config Basic
+
+![img](142)
+
+Thấy rằng server sử dụng:
+
+    location /static {
+        alias /var/www/app/static/;
+    }
+=> Khi sử dụng `alias` mà không có dấu gạch chéo ở phía sau `/static`, không phải `/static/`, `nginx` sẽ lấy phần sau `/static` và chỉ cần thêm nó vào đường dẫn `alias`, cho phép đọc file hệ thống. Tôi thử truy cập `/static../flag.txt` và tìm được flag:
+
+![img](143)
 
 
 
