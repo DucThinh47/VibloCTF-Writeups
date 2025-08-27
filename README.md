@@ -29,7 +29,7 @@
 - [long leg](https://github.com/DucThinh47/VibloCTF-Writeups#long-leg)
 - [JS is Awesome!](https://github.com/DucThinh47/VibloCTF-Writeups#js-is-awesome)
 - [Media Library](https://github.com/DucThinh47/VibloCTF-Writeups#media-library)
-- [Hide and seek]()
+- [Hide and seek](https://github.com/DucThinh47/VibloCTF-Writeups#hide-and-seek)
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1140,15 +1140,17 @@ Sau đó chỉ cần mở source sau khi checkout và tìm được flag:
 
 #### Hide and seek
 
-![img](132)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image132.png?raw=true)
 
 Như mô tả của thử thách: `Source code is everything!!`, kiểm tra source code, kiểm tra file `/static/bootstrap.min.js`: 
 
-![img](133)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image133.png?raw=true)
 
 => Tìm ra endpoint `/secret-terces007`, truy cập và tìm ra flag:
 
-![img](135)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image134.png?raw=true)
+
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image135.png?raw=true)
 
 
 
