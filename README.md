@@ -35,8 +35,8 @@
 - [Config Basic](https://github.com/DucThinh47/VibloCTF-Writeups#config-basic)
 - [Cat Pictures](https://github.com/DucThinh47/VibloCTF-Writeups#cat-pictures)
 - [Unbreakable Login](https://github.com/DucThinh47/VibloCTF-Writeups#unbreakable-login)
-- [Do you know Brute Force]()
-- [Easy Password]()
+- [Do you know Brute Force](https://github.com/DucThinh47/VibloCTF-Writeups#do-you-know-brute-force)
+- [Easy Password](https://github.com/DucThinh47/VibloCTF-Writeups#easy-password)
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1296,27 +1296,27 @@ Có một lỗ hổng RCE liên quan đến server này, tôi thử gọi `POST`
 
 #### Do you know Brute Force
 
-![img](153)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image153.png?raw=true)
 
 Kiểm tra source code, tìm được list username và password:
 
-![img](154)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image154.png?raw=true)
 
 Sử dụng Burp Intruder để brute-force, tìm ra username và password, đồng thời thêm vào phần Grep-Match chuỗi `Flag` và tìm ra flag:
 
-![img](155)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image155.png?raw=true)
 
 #### Easy Password
 
-![img](156)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image156.png?raw=true)
 
 Truy cập `/robots.txt`, tìm được endpoint ẩn `/s3cr3t_pass.txt`:
 
-![img](157)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image157.png?raw=true)
 
 Truy cập `/s3cr3t_pass.txt`:
 
-![img](158)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image158.png?raw=true)
 
 Phân tích đoạn code này:
 - Là một “check mật khẩu” kiểu `XOR-obfuscation`.
@@ -1338,11 +1338,11 @@ Nghĩa là so sánh:
 
 Tiếp theo để crach MD5, tôi sử dụng `hashcat`:
 
-![img](159)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image159.png?raw=true)
 
 => Tìm được password là `superpassword`, nhập vào trang chủ và tìm được flag:
 
-![img](160)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image160.png?raw=true)
 
 
 
