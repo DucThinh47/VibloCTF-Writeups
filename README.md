@@ -37,6 +37,7 @@
 - [Unbreakable Login](https://github.com/DucThinh47/VibloCTF-Writeups#unbreakable-login)
 - [Do you know Brute Force](https://github.com/DucThinh47/VibloCTF-Writeups#do-you-know-brute-force)
 - [Easy Password](https://github.com/DucThinh47/VibloCTF-Writeups#easy-password)
+- [WebShell]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1343,6 +1344,22 @@ Tiếp theo để crach MD5, tôi sử dụng `hashcat`:
 => Tìm được password là `superpassword`, nhập vào trang chủ và tìm được flag:
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image160.png?raw=true)
+
+#### WebShell
+
+![img](161)
+
+Sử dụng dirsearch tôi tìm được endpoint `/shell.php`. Thử truy cập:
+
+![img](162)
+
+Dựa vào đoạn code này, ý tưởng của tôi là sẽ lệnh vào tham số `cmd` trên URL. Tôi sẽ thử gửi payload như sau:
+
+![img](163)
+
+=> Thành công in ra nội dung file `/etc/passwd`. Sau khi thử tìm flag ở các file hệ thống, tôi tìm được được flag trong shell `/start.sh` – thường là nơi seed `flag/env` trong container:
+
+![img](164)
 
 
 
