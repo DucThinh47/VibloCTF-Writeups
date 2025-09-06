@@ -40,6 +40,7 @@
 - [WebShell](https://github.com/DucThinh47/VibloCTF-Writeups#webshell)
 - [Cracking SHA1](https://github.com/DucThinh47/VibloCTF-Writeups#cracking-sha1)
 - [Innocent Game?](https://github.com/DucThinh47/VibloCTF-Writeups#innocent-game)
+- [PHP Up Right It]()
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
@@ -1410,8 +1411,5 @@ Payload cuối cùng sẽ là:
         .chr(112).chr(104).chr(112))'
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image171.png?raw=true)
-
-
-
-
-
+#### PHP Up Right It
+Refresh lại page liên tục và ghép, sắp xếp các request để tìm flag.
