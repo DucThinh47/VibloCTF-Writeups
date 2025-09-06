@@ -40,7 +40,7 @@
 - [WebShell](https://github.com/DucThinh47/VibloCTF-Writeups#webshell)
 - [Cracking SHA1](https://github.com/DucThinh47/VibloCTF-Writeups#cracking-sha1)
 - [Innocent Game?](https://github.com/DucThinh47/VibloCTF-Writeups#innocent-game)
-- [PHP Up Right It]()
+- [PHP Up Right It](https://github.com/DucThinh47/VibloCTF-Writeups#php-up-right-it)
 #### Web7
 
 ![img](https://github.com/DucThinh47/VibloCTF-Writeups/blob/main/images/image0.png?raw=true)
